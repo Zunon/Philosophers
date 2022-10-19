@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 08:19:15 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/19 06:53:16 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/19 07:29:58 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	roundtable_alloc(t_roundtable *table)
 	while (++i < table->chairs)
 	{
 		table->forks[i] = (t_philo_fork){0};
-		table->philosophers[i] = (t_philosopher){THINKING, &(table->forks[i]), &(table->forks[(i + 1) % table->chairs])};
+		table->philosophers[i] = (t_philosopher){0, THINKING, &(table->forks[i]), &(table->forks[(i + 1) % table->chairs])};
 		if (pthread_mutex_init(&(table->forks->mutex), NULL))
 		{
 			free(table->philosophers);

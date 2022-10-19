@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 08:19:06 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/19 06:34:48 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/19 07:28:55 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef enum e_direction
 
 typedef enum e_philo_state 
 {
+	BLANK,
 	THINKING,
 	EATING,
 	SLEEPING,
@@ -47,6 +48,7 @@ typedef struct s_philo_fork
 
 typedef struct s_philosopher
 {
+	pthread_t		soul;
 	t_philo_state	current_state;
 	t_philo_fork	*left_fork;
 	t_philo_fork	*right_fork;
