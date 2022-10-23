@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 08:19:06 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/23 18:10:04 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/23 19:13:39 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,20 +46,22 @@ typedef struct s_philo_fork
 	t_direction		first;
 }	t_philo_fork;
 
-typedef struct s_philosopher
-{
-	pthread_t		soul;
-	t_philo_state	current_state;
-	t_philo_fork	*left_fork;
-	t_philo_fork	*right_fork;
-}	t_philosopher;
-
 typedef struct s_philo_parameters
 {
 	t_milliseconds	starve_time;
 	t_milliseconds	eat_time;
 	t_milliseconds	sleep_time;
 }	t_philo_parameters;
+
+typedef struct s_philosopher
+{
+	pthread_t			soul;
+	t_philo_fork		*left_fork;
+	t_philo_fork		*right_fork;
+	t_philo_parameters	*life;
+	t_philo_state		current_state;
+	bool				*reality;
+}	t_philosopher;
 
 typedef struct s_roundtable
 {
@@ -68,6 +70,7 @@ typedef struct s_roundtable
 	t_philo_parameters	health;
 	unsigned long		*min_eats;
 	size_t				chairs;
+	bool				sim_on;
 }	t_roundtable;
 
 bool			ul_overflow(unsigned long before, unsigned long after);
