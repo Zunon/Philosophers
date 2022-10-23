@@ -6,13 +6,13 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 17:59:06 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/23 19:15:20 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/23 19:37:12 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-t_philosopher	philo_init(bool *world, t_philo_parameters *health,
+t_philosopher	philo_init(t_roundtable *world,
 		t_philo_fork *left, t_philo_fork *right)
 {
 	t_philosopher	result;
@@ -21,8 +21,11 @@ t_philosopher	philo_init(bool *world, t_philo_parameters *health,
 	result.current_state = BLANK;
 	result.left_fork = left;
 	result.right_fork = right;
-	result.reality = world;
-	result.life = health;
+	result.reality = &(world->sim_on);
+	result.life = &(world->health);
+	result.meals_eaten = 0;
+	result.last_eaten = (t_timeval){0, 0};
+	result.time = &(world->time);
 	return (result);
 }
 
@@ -47,8 +50,8 @@ int	roundtable_alloc(t_roundtable *table)
 	while (++i < table->chairs)
 	{
 		table->forks[i] = (t_philo_fork){0};
-		table->philosophers[i] = philo_init(&table->sim_on, &table->health,
-				&(table->forks[i]), &(table->forks[(i + 1) % table->chairs]));
+		table->philosophers[i] = philo_init(table, &(table->forks[i]),
+				&(table->forks[(i + 1) % table->chairs]));
 		if (pthread_mutex_init(&(table->forks->mutex), NULL))
 		{
 			free(table->philosophers);

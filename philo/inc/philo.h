@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 08:19:06 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/23 19:13:39 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/23 19:33:07 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,12 @@ typedef enum e_philo_state
 	DEAD
 }	t_philo_state;
 
+typedef struct s_timeval
+{
+	time_t		tv_sec;
+	suseconds_t	tv_usec;
+}	t_timeval;
+
 typedef struct s_philo_fork
 {
 	pthread_mutex_t	mutex;
@@ -56,6 +62,9 @@ typedef struct s_philo_parameters
 typedef struct s_philosopher
 {
 	pthread_t			soul;
+	t_timeval			*time;
+	t_timeval			last_eaten;
+	unsigned long		meals_eaten;
 	t_philo_fork		*left_fork;
 	t_philo_fork		*right_fork;
 	t_philo_parameters	*life;
@@ -68,6 +77,7 @@ typedef struct s_roundtable
 	t_philo_fork		*forks;
 	t_philosopher		*philosophers;
 	t_philo_parameters	health;
+	t_timeval			time;
 	unsigned long		*min_eats;
 	size_t				chairs;
 	bool				sim_on;
