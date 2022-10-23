@@ -6,11 +6,30 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 17:59:06 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/23 18:20:40 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/23 18:45:56 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
+
+t_philosopher	philo_init(pthread_t soul, t_philo_state state,
+		t_philo_fork *left, t_philo_fork *right)
+{
+	t_philosopher	result;
+
+	result.soul = soul;
+	result.current_state = state;
+	result.left_fork = left;
+	result.right_fork = right;
+	return (result);
+}
+
+int	free_philos(t_philosopher **philo_arr)
+{
+	free(*philo_arr);
+	*philo_arr = NULL;
+	return (2);
+}
 
 int	roundtable_alloc(t_roundtable *table)
 {
@@ -22,17 +41,12 @@ int	roundtable_alloc(t_roundtable *table)
 		return (1);
 	table->forks = malloc(table->chairs * sizeof(t_philo_fork));
 	if (!(table->forks))
-	{
-		free(table->philosophers);
-		table->philosophers = NULL;
-		return (2);
-	}
+		return (free_philos(&table->philosophers));
 	while (++i < table->chairs)
 	{
 		table->forks[i] = (t_philo_fork){0};
-		table->philosophers[i]
-			= (t_philosopher){0, BLANK, &(table->forks[i]),
-			&(table->forks[(i + 1) % table->chairs])};
+		table->philosophers[i] = philo_init(0, BLANK, &(table->forks[i]),
+				&(table->forks[(i + 1) % table->chairs]));
 		if (pthread_mutex_init(&(table->forks->mutex), NULL))
 		{
 			free(table->philosophers);
