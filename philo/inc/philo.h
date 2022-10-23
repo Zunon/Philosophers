@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 08:19:06 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/19 07:28:55 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/23 18:10:04 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <pthread.h>
 # include <stdbool.h>
 
-typedef unsigned long t_milliseconds;
+typedef unsigned long	t_milliseconds;
 
 typedef enum e_direction
 {
@@ -29,7 +29,7 @@ typedef enum e_direction
 	RIGHT
 }	t_direction;
 
-typedef enum e_philo_state 
+typedef enum e_philo_state
 {
 	BLANK,
 	THINKING,
@@ -70,4 +70,13 @@ typedef struct s_roundtable
 	size_t				chairs;
 }	t_roundtable;
 
+bool			ul_overflow(unsigned long before, unsigned long after);
+int				panic(char *msg, int errno);
+bool			numeric_args(int argc, char *argv[]);
+unsigned long	*atoul(const char *string, unsigned long *location);
+int				roundtable_alloc(t_roundtable *table);
+int				roundtable_init(t_roundtable *table, char *arguments[],
+					bool eat_limit);
+int				roundtable_destroy(t_roundtable *table);
+void			simulate_philosophers(t_roundtable *table);
 #endif
