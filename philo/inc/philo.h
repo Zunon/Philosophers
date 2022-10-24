@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 08:19:06 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/23 19:33:07 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/24 14:31:39 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ typedef struct s_philosopher
 {
 	pthread_t			soul;
 	t_timeval			*time;
+	size_t				name;
 	t_timeval			last_eaten;
 	unsigned long		meals_eaten;
 	t_philo_fork		*left_fork;

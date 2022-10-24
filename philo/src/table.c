@@ -6,19 +6,20 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 17:59:06 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/23 19:37:12 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/24 14:47:16 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-t_philosopher	philo_init(t_roundtable *world,
+t_philosopher	philo_init(t_roundtable *world, size_t name,
 		t_philo_fork *left, t_philo_fork *right)
 {
 	t_philosopher	result;
 
 	result.soul = 0;
 	result.current_state = BLANK;
+	result.name = name;
 	result.left_fork = left;
 	result.right_fork = right;
 	result.reality = &(world->sim_on);
@@ -50,7 +51,7 @@ int	roundtable_alloc(t_roundtable *table)
 	while (++i < table->chairs)
 	{
 		table->forks[i] = (t_philo_fork){0};
-		table->philosophers[i] = philo_init(table, &(table->forks[i]),
+		table->philosophers[i] = philo_init(table, i, &(table->forks[i]),
 				&(table->forks[(i + 1) % table->chairs]));
 		if (pthread_mutex_init(&(table->forks->mutex), NULL))
 		{
