@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 08:19:15 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/23 19:20:45 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/28 17:20:40 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void	simulate_philosophers(t_roundtable *table)
 {
-	printf("World Simulated Successfully!\n");
+	init_simulation(table);
+	printf("World Simulated!\n");
 	roundtable_destroy(table);
 }
 

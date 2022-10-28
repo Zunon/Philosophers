@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 08:19:06 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/24 14:31:39 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/28 17:17:06 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ typedef struct s_roundtable
 	bool				sim_on;
 }	t_roundtable;
 
+int				init_simulation(t_roundtable *world);
 bool			ul_overflow(unsigned long before, unsigned long after);
 int				panic(char *msg, int errno);
 bool			numeric_args(int argc, char *argv[]);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_utils.c                                    :+:      :+:    :+:   */
+/*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 18:01:18 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/23 18:02:53 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/28 17:11:55 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ unsigned long	*atoul(const char *string, unsigned long *location)
 	{
 		temp = accumulator;
 		accumulator *= 10;
-		accumulator += string[i++] + '0';
+		accumulator += string[i++] - '0';
 		if (ul_overflow(temp, accumulator))
 			return (NULL);
 	}

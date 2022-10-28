@@ -6,19 +6,19 @@
 #    By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/18 08:14:11 by kalmheir          #+#    #+#              #
-#    Updated: 2022/10/23 18:51:31 by kalmheir         ###   ########.fr        #
+#    Updated: 2022/10/28 17:00:09 by kalmheir         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		:= philo
 BNSNAME	:= philo_bonus
-SOURCES	:= $(NAME)/src/main.c $(NAME)/src/parsing_utils.c \
-	$(NAME)/src/table_utils.c
+SOURCES	:= $(NAME)/src/main.c $(NAME)/src/parsing.c \
+	$(NAME)/src/table.c $(NAME)/src/simulation.c
 BNSSRCS	:= $(BNSNAME)/src/main.c
 OBJECTS	:= $(SOURCES:.c=.o)
 BNSOBJS	:= $(OBJECTS:.c=.o)
 CC			:= gcc
-CFLAGS	:= -Wall -Wextra -Werror -lpthread 
+CFLAGS	:= -Wall -Wextra -Werror #-lpthread 
 RM			:= rm -f
 
 $(NAME): mandatory 
