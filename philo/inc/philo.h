@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 08:19:06 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/28 17:17:06 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/29 13:56:22 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,7 @@ typedef enum e_philo_state
 	DEAD
 }	t_philo_state;
 
-typedef struct s_timeval
-{
-	time_t		tv_sec;
-	suseconds_t	tv_usec;
-}	t_timeval;
+typedef struct timeval t_timeval;
 
 typedef struct s_philo_fork
 {
@@ -92,6 +88,7 @@ unsigned long	*atoul(const char *string, unsigned long *location);
 int				roundtable_alloc(t_roundtable *table);
 int				roundtable_init(t_roundtable *table, char *arguments[],
 					bool eat_limit);
+void			*live_life(void *philo_data);
 int				roundtable_destroy(t_roundtable *table);
 void			simulate_philosophers(t_roundtable *table);
 #endif
