@@ -6,14 +6,14 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 17:59:06 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/29 16:08:35 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/29 19:39:03 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
 t_philosopher	philo_init(t_roundtable *world, size_t name,
-		t_philo_fork *left, t_philo_fork *right)
+		t_philo_fork *pair[2])
 {
 	t_philosopher	result;
 
@@ -23,16 +23,18 @@ t_philosopher	philo_init(t_roundtable *world, size_t name,
 	result.current_state.state = BLANK;
 	pthread_mutex_unlock(&result.current_state.mutex);
 	result.name = name;
-	result.left_fork = left;
-	result.right_fork = right;
+	result.left_fork = pair[0];
+	result.right_fork = pair[1];
 	pthread_mutex_init(&result.reality.mutex, NULL);
 	pthread_mutex_lock(&result.reality.mutex);
 	result.reality.sim_on = false;
 	pthread_mutex_unlock(&result.reality.mutex);
 	result.life = &(world->health);
-	result.meals_eaten = 0;
-	result.last_eaten = (t_timeval){0, 0};
-	result.time = &(world->time);
+	pthread_mutex_init(&result.meals_eaten.mutex, NULL);
+	pthread_mutex_lock(&result.meals_eaten.mutex);
+	result.meals_eaten.meals = 0;
+	pthread_mutex_unlock(&result.meals_eaten.mutex);
+	result.last_eaten = 0;
 	return (result);
 }
 
@@ -45,7 +47,8 @@ int	free_philos(t_philosopher **philo_arr)
 
 int	roundtable_alloc(t_roundtable *table)
 {
-	size_t	i;
+	size_t			i;
+	t_philo_fork	*reach[2];
 
 	i = -1;
 	table->philosophers = malloc(table->chairs * sizeof(t_philosopher));
@@ -56,9 +59,10 @@ int	roundtable_alloc(t_roundtable *table)
 		return (free_philos(&table->philosophers));
 	while (++i < table->chairs)
 	{
+		reach[0] = &(table->forks[i]);
+		reach[1] = &(table->forks[(i + 1) % table->chairs]);
 		table->forks[i] = (t_philo_fork){0};
-		table->philosophers[i] = philo_init(table, i, &(table->forks[i]),
-				&(table->forks[(i + 1) % table->chairs]));
+		table->philosophers[i] = philo_init(table, i, reach);
 		if (pthread_mutex_init(&((table->forks + i)->mutex), NULL))
 		{
 			free(table->philosophers);
@@ -102,9 +106,14 @@ int	roundtable_destroy(t_roundtable *table)
 	size_t i;
 
 	i = -1;
-	free(table->philosophers);
 	while (++i < table->chairs)
+	{
 		pthread_mutex_destroy(&((table->forks)[i].mutex));
+		pthread_mutex_destroy(&((table->philosophers)[i].current_state.mutex));
+		pthread_mutex_destroy(&((table->philosophers)[i].reality.mutex));
+		pthread_mutex_destroy(&((table->philosophers)[i].meals_eaten.mutex));
+	}
+	free(table->philosophers);
 	free(table->forks);
 	if (table->min_eats)
 		free(table->min_eats);

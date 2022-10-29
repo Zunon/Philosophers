@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 08:19:06 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/29 16:13:49 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/29 19:37:47 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,12 @@ typedef struct s_worldlock
 	bool			sim_on;
 }	t_worldlock;
 
+typedef struct s_meallock
+{
+	pthread_mutex_t mutex;
+	unsigned long	meals;
+}	t_meallock;
+
 typedef struct timeval t_timeval;
 
 typedef struct s_philo_fork
@@ -70,10 +76,10 @@ typedef struct s_philo_parameters
 typedef struct s_philosopher
 {
 	pthread_t			soul;
-	t_timeval			*time;
+	t_timeval			begin;
 	size_t				name;
-	t_timeval			last_eaten;
-	unsigned long		meals_eaten;
+	t_milliseconds		last_eaten;
+	t_meallock			meals_eaten;
 	t_philo_fork		*left_fork;
 	t_philo_fork		*right_fork;
 	t_philo_parameters	*life;
@@ -86,7 +92,6 @@ typedef struct s_roundtable
 	t_philo_fork		*forks;
 	t_philosopher		*philosophers;
 	t_philo_parameters	health;
-	t_timeval			time;
 	unsigned long		*min_eats;
 	size_t				chairs;
 	bool				sim_on;
@@ -100,6 +105,7 @@ unsigned long	*atoul(const char *string, unsigned long *location);
 int				roundtable_alloc(t_roundtable *table);
 int				roundtable_init(t_roundtable *table, char *arguments[],
 					bool eat_limit);
+t_milliseconds	get_time_in_ms(t_timeval then);
 void			*live_life(void *philo_data);
 int				roundtable_destroy(t_roundtable *table);
 void			simulate_philosophers(t_roundtable *table);

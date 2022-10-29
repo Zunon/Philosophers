@@ -6,7 +6,7 @@
 #    By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/18 08:14:11 by kalmheir          #+#    #+#              #
-#    Updated: 2022/10/29 15:00:09 by kalmheir         ###   ########.fr        #
+#    Updated: 2022/10/29 18:36:47 by kalmheir         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ BNSSRCS	:= $(BNSNAME)/src/main.c
 OBJECTS	:= $(SOURCES:.c=.o)
 BNSOBJS	:= $(OBJECTS:.c=.o)
 CC			:= gcc
-CFLAGS	:= -Wall -Wextra -Werror #-lpthread 
+CFLAGS	:= -Wall -g -Wextra -Werror #-lpthread 
 RM			:= rm -f
 
 $(NAME): mandatory 

@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 19:18:40 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/29 15:48:49 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/29 19:58:47 by kalmheir         ###   ########.fr       */
 /*											                                  */
 /* ************************************************************************** */
 
@@ -27,18 +27,25 @@ void	prioritize_forks(t_philo_fork *forks, size_t n)
 int	init_simulation(t_roundtable *world)
 {
 	size_t	i;
+	t_timeval	begin;
 
-	i = -1;
 	prioritize_forks(world->forks, world->chairs);
+	world->sim_on = true;
+	gettimeofday(&begin, NULL);
+	i = -1;
+	while (++i < world->chairs)
+	{
+		pthread_mutex_lock(&(world->philosophers[i].reality.mutex));
+		world->philosophers[i].reality.sim_on = true;
+		world->philosophers[i].begin = begin;
+		pthread_mutex_unlock(&(world->philosophers[i].reality.mutex));
+	}
+	i = -1;
 	while (++i < world->chairs)
 	{
 		if (pthread_create(&((world->philosophers + i)->soul), NULL, &live_life,
 					(world->philosophers) + i))
 			return (-1);
-		if (pthread_detach((world->philosophers + i)->soul))
-			return (-2);
 	}
-	world->sim_on = true;
-	gettimeofday(&world->time, NULL);
 	return (0);
 }

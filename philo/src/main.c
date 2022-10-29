@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 08:19:15 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/29 16:44:59 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/29 19:43:10 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,10 @@ bool	end_state_achieved(t_philosopher *philo, unsigned long *min_eats, size_t ch
 	pthread_mutex_unlock(&philo->current_state.mutex);
 	if (min_eats)
 	{
-		if (philo->meals_eaten >= *min_eats)
+		pthread_mutex_lock(&(philo->meals_eaten.mutex));
+		if (philo->meals_eaten.meals >= *min_eats)
 			philos_done++;
+		pthread_mutex_unlock(&(philo->meals_eaten.mutex));
 		if (philos_done == chairs)
 			return (true);
 	}
@@ -46,6 +48,12 @@ void	end_simulation(t_roundtable *table)
 		pthread_mutex_unlock(&((table->philosophers + i)->reality.mutex));
 		i++;
 	}
+	i = 0;
+	while (i < table->chairs)
+	{
+		pthread_join((table->philosophers + i)->soul, NULL);
+		i++;
+	}
 }
 
 void	dining_philos(t_roundtable *table)
@@ -53,7 +61,6 @@ void	dining_philos(t_roundtable *table)
 	size_t i;
 
 	i = 0;
-	settimeofday(&table->time, NULL);
 	while (i < table->chairs)
 	{
 		if (end_state_achieved(table->philosophers + i, table->min_eats,
@@ -68,7 +75,7 @@ void	dining_philos(t_roundtable *table)
 
 void	simulate_philosophers(t_roundtable *table)
 {
-	init_simulation(table);
+	if (init_simulation(table)) printf("INITIALIZATION FAILURE\n");
 	while (table->sim_on)
 		dining_philos(table);
 	printf("World Simulated!\n");
