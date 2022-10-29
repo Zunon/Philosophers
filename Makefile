@@ -6,14 +6,14 @@
 #    By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/18 08:14:11 by kalmheir          #+#    #+#              #
-#    Updated: 2022/10/28 17:00:09 by kalmheir         ###   ########.fr        #
+#    Updated: 2022/10/29 15:00:09 by kalmheir         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		:= philo
 BNSNAME	:= philo_bonus
-SOURCES	:= $(NAME)/src/main.c $(NAME)/src/parsing.c \
-	$(NAME)/src/table.c $(NAME)/src/simulation.c
+SOURCES	:= philo/src/main.c philo/src/parsing.c philo/src/table.c \
+		   philo/src/simulation.c philo/src/life.c
 BNSSRCS	:= $(BNSNAME)/src/main.c
 OBJECTS	:= $(SOURCES:.c=.o)
 BNSOBJS	:= $(OBJECTS:.c=.o)

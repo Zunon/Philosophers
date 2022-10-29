@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 08:19:15 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/29 14:20:33 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/29 16:19:05 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ bool	end_state_achieved(t_philosopher *philo, unsigned long *min_eats, size_t ch
 {
 	static unsigned long philos_done = 0;
 
-	if (philo->current_state == DEAD)
+	pthread_mutex_lock(&philo->current_state.mutex);
+	if (philo->current_state.state == DEAD)
 		return (true);
 	if (min_eats)
 	{
@@ -26,6 +27,21 @@ bool	end_state_achieved(t_philosopher *philo, unsigned long *min_eats, size_t ch
 			return (true);
 	}
 	return (false);
+}
+
+void	end_simulation(t_roundtable *table)
+{
+	size_t i;
+
+	table->sim_on = false;
+	i = 0;
+	while (i < table->chairs)
+	{
+		pthread_mutex_lock(&((table->philosophers + i)->reality.mutex));
+		(table->philosophers + i)->reality.sim_on = false;
+		pthread_mutex_unlock(&((table->philosophers + i)->reality.mutex));
+		i++;
+	}
 }
 
 void	dining_philos(t_roundtable *table)
@@ -39,7 +55,7 @@ void	dining_philos(t_roundtable *table)
 		if (end_state_achieved(table->philosophers + i, table->min_eats,
 					table->chairs))
 		{
-			table->sim_on = false;
+			end_simulation(table);
 			break ;
 		}
 		i++;
@@ -52,7 +68,6 @@ void	simulate_philosophers(t_roundtable *table)
 	while (table->sim_on)
 		dining_philos(table);
 	printf("World Simulated!\n");
-	roundtable_destroy(table);
 }
 
 int	main(int argc, char *argv[])

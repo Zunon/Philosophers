@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 18:01:18 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/28 17:11:55 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/29 15:50:49 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ bool	numeric_args(int argc, char *argv[])
 		{
 			if (argv[i][j] < '0' || argv[i][j] > '9')
 			{
-				printf("%c,\n", argv[i][j]);
 				return (false);
 			}
 		}

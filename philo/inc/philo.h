@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 08:19:06 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/29 13:56:22 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/29 16:13:49 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,26 @@ typedef enum e_direction
 	RIGHT
 }	t_direction;
 
-typedef enum e_philo_state
+enum e_philo_state
 {
 	BLANK,
 	THINKING,
 	EATING,
 	SLEEPING,
 	DEAD
+};
+
+typedef struct s_philo_state
+{
+	pthread_mutex_t	mutex;
+	enum e_philo_state	state;
 }	t_philo_state;
+
+typedef struct s_worldlock
+{
+	pthread_mutex_t mutex;
+	bool			sim_on;
+}	t_worldlock;
 
 typedef struct timeval t_timeval;
 
@@ -66,7 +78,7 @@ typedef struct s_philosopher
 	t_philo_fork		*right_fork;
 	t_philo_parameters	*life;
 	t_philo_state		current_state;
-	bool				*reality;
+	t_worldlock			reality;
 }	t_philosopher;
 
 typedef struct s_roundtable

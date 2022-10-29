@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/28 17:25:30 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/28 17:26:08 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/29 15:04:03 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,11 @@
 	// @NOTE: Check reality between each action
 void	*live_life(void *philo_data)
 {
-	(void)philo_data;
+	t_philosopher *my_data;
+
+	my_data = philo_data;
+	my_data->current_state = DEAD;
+	(void)my_data;
 	return (NULL);
 }
 

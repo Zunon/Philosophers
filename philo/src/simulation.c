@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 19:18:40 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/29 13:55:40 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/29 15:48:49 by kalmheir         ###   ########.fr       */
 /*											                                  */
 /* ************************************************************************** */
 
@@ -31,9 +31,13 @@ int	init_simulation(t_roundtable *world)
 	i = -1;
 	prioritize_forks(world->forks, world->chairs);
 	while (++i < world->chairs)
-		if (pthread_create(&(world->philosophers->soul), NULL, &live_life,
+	{
+		if (pthread_create(&((world->philosophers + i)->soul), NULL, &live_life,
 					(world->philosophers) + i))
 			return (-1);
+		if (pthread_detach((world->philosophers + i)->soul))
+			return (-2);
+	}
 	world->sim_on = true;
 	gettimeofday(&world->time, NULL);
 	return (0);
