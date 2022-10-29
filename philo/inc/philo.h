@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 08:19:06 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/29 19:37:47 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/29 22:40:33 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ typedef struct timeval t_timeval;
 typedef struct s_philo_fork
 {
 	pthread_mutex_t	mutex;
-	bool			interest[2];
 	bool			taken;
 	t_direction		first;
 }	t_philo_fork;
@@ -109,4 +108,5 @@ t_milliseconds	get_time_in_ms(t_timeval then);
 void			*live_life(void *philo_data);
 int				roundtable_destroy(t_roundtable *table);
 void			simulate_philosophers(t_roundtable *table);
+void			philo_think(t_philosopher *oneself);
 #endif

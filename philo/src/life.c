@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/28 17:25:30 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/29 20:05:11 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/29 22:58:36 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,48 @@ void	check_reality(t_philosopher *oneself)
 	// @NOTE: Check reality between each action
 void	*live_life(void *philo_data)
 {
-	t_philosopher *my_data;
+	t_philosopher	*my_data;
+	bool			wait_turn;
+	t_philo_fork	*low;
+	t_philo_fork	*high;
 
 	my_data = philo_data;
-	my_data->left_fork->interest[1] = true;
-	my_data->right_fork->interest[0] = true;
-	while (my_data->left_fork->interest[0] && my_data->left_fork->first == LEFT)
+	wait_turn = true;
+	if (my_data->left_fork < my_data->right_fork)
+	{
+		low = my_data->left_fork;
+		high = my_data->right_fork;
+	}
+	else
+	{
+		low = my_data->right_fork;
+		high = my_data->left_fork;
+	}
+	while (wait_turn)
 	{
 		philo_think(my_data);
 		check_reality(my_data);
+		pthread_mutex_lock(&low->mutex);
+		pthread_mutex_lock(&high->mutex);
+		wait_turn = my_data->left_fork->first == LEFT || my_data->right_fork->first == RIGHT;
+		pthread_mutex_unlock(&high->mutex);
+		pthread_mutex_unlock(&low->mutex);
 	}
+	printf("Locking left! %zu\n", my_data->name);
+	pthread_mutex_lock(&low->mutex);
+	low->taken = true;
+	printf("Locking right! %zu\n", my_data->name);
+	pthread_mutex_lock(&high->mutex);
+	high->taken = true;
+	printf("Eating! %zu\n", my_data->name);
+	low->taken = false;
+	high->taken = false;
+	my_data->left_fork->first = LEFT;
+	my_data->right_fork->first = RIGHT;
+	pthread_mutex_unlock(&high->mutex);
+	printf("Unlocking right! %zu\n", my_data->name);
+	pthread_mutex_unlock(&low->mutex);
+	printf("Unlocking left! %zu\n", my_data->name);
 	pthread_mutex_lock(&my_data->current_state.mutex);
 	my_data->current_state.state = DEAD;
 	pthread_mutex_unlock(&my_data->current_state.mutex);
