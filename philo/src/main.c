@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 08:19:15 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/29 16:19:05 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/29 16:44:59 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,13 @@ bool	end_state_achieved(t_philosopher *philo, unsigned long *min_eats, size_t ch
 {
 	static unsigned long philos_done = 0;
 
-	pthread_mutex_lock(&philo->current_state.mutex);
+	pthread_mutex_lock(&(philo->current_state.mutex));
 	if (philo->current_state.state == DEAD)
+	{
+		pthread_mutex_unlock(&(philo->current_state.mutex));
 		return (true);
+	}
+	pthread_mutex_unlock(&philo->current_state.mutex);
 	if (min_eats)
 	{
 		if (philo->meals_eaten >= *min_eats)

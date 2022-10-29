@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/28 17:25:30 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/29 15:04:03 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/29 16:54:47 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@ void	*live_life(void *philo_data)
 	t_philosopher *my_data;
 
 	my_data = philo_data;
-	my_data->current_state = DEAD;
+	pthread_mutex_lock(&my_data->current_state.mutex);
+	my_data->current_state.state = DEAD;
+	pthread_mutex_unlock(&my_data->current_state.mutex);
 	(void)my_data;
 	return (NULL);
 }
