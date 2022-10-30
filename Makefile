@@ -6,20 +6,23 @@
 #    By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/18 08:14:11 by kalmheir          #+#    #+#              #
-#    Updated: 2022/10/29 23:01:18 by kalmheir         ###   ########.fr        #
+#    Updated: 2022/10/30 14:02:20 by kalmheir         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		:= philo
 BNSNAME	:= philo_bonus
-SOURCES	:= philo/src/main.c philo/src/parsing.c philo/src/table.c \
-		   philo/src/simulation.c philo/src/life.c
-BNSSRCS	:= $(BNSNAME)/src/main.c
+SRCSDIR	:= $(NAME)/src/
+SRCFILS	:= main.c parsing.c table.c simulation.c life.c time.c
+SOURCES	:= $(addprefix $(SRCSDIR), $(SRCFILS))
+BSRCDIR := $(BNSNAME)/src/
+BSRCFIL	:= main.c
+BNSSRCS := $(addprefix $(BSRCDIR), $(BSRCFIL))
 OBJECTS	:= $(SOURCES:.c=.o)
 BNSOBJS	:= $(OBJECTS:.c=.o)
-CC			:= gcc
-CFLAGS	:= -Wall -g -Wextra -Werror #-lpthread 
-RM			:= rm -f
+CC		:= gcc
+CFLAGS	:= -Wall -g -Wextra -Werror #-fsanitize=thread #-lpthread 
+RM		:= rm -f
 
 $(NAME): mandatory 
 

@@ -6,12 +6,12 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 08:19:15 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/29 19:43:10 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/30 14:33:29 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
-
+// break endstate;
 bool	end_state_achieved(t_philosopher *philo, unsigned long *min_eats, size_t chairs)
 {
 	static unsigned long philos_done = 0;
@@ -44,7 +44,7 @@ void	end_simulation(t_roundtable *table)
 	while (i < table->chairs)
 	{
 		pthread_mutex_lock(&((table->philosophers + i)->reality.mutex));
-		(table->philosophers + i)->reality.sim_on = false;
+		(table->philosophers + i)->reality.val = false;
 		pthread_mutex_unlock(&((table->philosophers + i)->reality.mutex));
 		i++;
 	}
@@ -63,6 +63,7 @@ void	dining_philos(t_roundtable *table)
 	i = 0;
 	while (i < table->chairs)
 	{
+		// if (is_dead(table->philosophers + i, 	
 		if (end_state_achieved(table->philosophers + i, table->min_eats,
 					table->chairs))
 		{

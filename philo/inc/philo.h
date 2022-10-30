@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 08:19:06 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/29 22:40:33 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/30 13:56:03 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,11 @@ typedef struct s_philo_state
 	enum e_philo_state	state;
 }	t_philo_state;
 
-typedef struct s_worldlock
+typedef struct s_bool_lock
 {
 	pthread_mutex_t mutex;
-	bool			sim_on;
-}	t_worldlock;
+	bool			val;
+}	t_bool_lock;
 
 typedef struct s_meallock
 {
@@ -83,11 +83,13 @@ typedef struct s_philosopher
 	t_philo_fork		*right_fork;
 	t_philo_parameters	*life;
 	t_philo_state		current_state;
-	t_worldlock			reality;
+	t_bool_lock			reality;
+	t_bool_lock			*death_state;
 }	t_philosopher;
 
 typedef struct s_roundtable
 {
+	t_bool_lock			death;
 	t_philo_fork		*forks;
 	t_philosopher		*philosophers;
 	t_philo_parameters	health;
@@ -109,4 +111,7 @@ void			*live_life(void *philo_data);
 int				roundtable_destroy(t_roundtable *table);
 void			simulate_philosophers(t_roundtable *table);
 void			philo_think(t_philosopher *oneself);
+void			philo_eat(t_philosopher *me, t_philo_fork *ord[2]);
+t_milliseconds	get_time_in_ms(t_timeval then);
+void			do_action(t_philosopher *me, enum e_philo_state action);
 #endif

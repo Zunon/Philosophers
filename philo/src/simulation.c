@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 19:18:40 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/29 19:58:47 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/30 13:40:32 by kalmheir         ###   ########.fr       */
 /*											                                  */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	init_simulation(t_roundtable *world)
 	while (++i < world->chairs)
 	{
 		pthread_mutex_lock(&(world->philosophers[i].reality.mutex));
-		world->philosophers[i].reality.sim_on = true;
+		world->philosophers[i].reality.val = true;
 		world->philosophers[i].begin = begin;
 		pthread_mutex_unlock(&(world->philosophers[i].reality.mutex));
 	}

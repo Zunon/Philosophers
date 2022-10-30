@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 17:59:06 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/29 19:39:03 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/30 14:01:46 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ t_philosopher	philo_init(t_roundtable *world, size_t name,
 	pthread_mutex_lock(&result.current_state.mutex);
 	result.current_state.state = BLANK;
 	pthread_mutex_unlock(&result.current_state.mutex);
-	result.name = name;
+	result.name = name + 1;
 	result.left_fork = pair[0];
 	result.right_fork = pair[1];
 	pthread_mutex_init(&result.reality.mutex, NULL);
 	pthread_mutex_lock(&result.reality.mutex);
-	result.reality.sim_on = false;
+	result.reality.val = false;
 	pthread_mutex_unlock(&result.reality.mutex);
 	result.life = &(world->health);
 	pthread_mutex_init(&result.meals_eaten.mutex, NULL);
@@ -35,6 +35,7 @@ t_philosopher	philo_init(t_roundtable *world, size_t name,
 	result.meals_eaten.meals = 0;
 	pthread_mutex_unlock(&result.meals_eaten.mutex);
 	result.last_eaten = 0;
+	result.death_state = &world->death;
 	return (result);
 }
 
@@ -51,6 +52,9 @@ int	roundtable_alloc(t_roundtable *table)
 	t_philo_fork	*reach[2];
 
 	i = -1;
+	if (pthread_mutex_init(&table->death.mutex, NULL))
+		return (8);
+	table->death.val = false;
 	table->philosophers = malloc(table->chairs * sizeof(t_philosopher));
 	if (!(table->philosophers))
 		return (1);
