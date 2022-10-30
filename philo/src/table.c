@@ -89,7 +89,8 @@ int	roundtable_init(t_roundtable *table, char *arguments[], bool eat_limit)
 	if (!atoul(arguments[3], &time_to_sleep))
 		return (1);
 	table->health
-		= (t_philo_parameters){time_to_die, time_to_eat, time_to_sleep, table->health.min_eats};
+		= (t_philo_parameters){time_to_die, time_to_eat, time_to_sleep,
+		table->health.min_eats};
 	if (eat_limit && !atoul(arguments[4], &min_eats))
 		return (1);
 	else if (eat_limit)
@@ -102,7 +103,7 @@ int	roundtable_init(t_roundtable *table, char *arguments[], bool eat_limit)
 
 int	roundtable_destroy(t_roundtable *table)
 {
-	size_t i;
+	size_t	i;
 
 	i = -1;
 	while (++i < table->chairs)

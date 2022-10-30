@@ -26,7 +26,7 @@ void	prioritize_forks(t_philo_fork *forks, size_t n)
 
 int	init_simulation(t_roundtable *world)
 {
-	size_t	i;
+	size_t		i;
 	t_timeval	begin;
 
 	prioritize_forks(world->forks, world->chairs);
@@ -43,7 +43,7 @@ int	init_simulation(t_roundtable *world)
 	{
 		usleep(100);
 		if (pthread_create(&((world->philosophers + i)->soul), NULL, &live_life,
-					(world->philosophers) + i))
+				(world->philosophers) + i))
 			return (-1);
 	}
 	return (0);

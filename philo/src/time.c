@@ -17,5 +17,6 @@ t_milliseconds	get_time_in_ms(t_timeval then)
 	t_timeval			now;
 
 	gettimeofday(&now, NULL);
-	return (1000 * (now.tv_sec - then.tv_sec) + (now.tv_usec - then.tv_usec) / 1000);
+	return (1000 * (now.tv_sec - then.tv_sec)
+		+ (now.tv_usec - then.tv_usec) / 1000);
 }

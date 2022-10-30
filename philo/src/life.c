@@ -19,7 +19,8 @@ bool	check_reality(t_philosopher *oneself)
 	pthread_mutex_lock(&oneself->reality.mutex);
 	result = oneself->reality.val;
 	pthread_mutex_unlock(&oneself->reality.mutex);
-	if (get_time_in_ms(oneself->begin) - oneself->last_eaten > oneself->life->starve_time)
+	if (get_time_in_ms(oneself->begin) - oneself->last_eaten
+		> oneself->life->starve_time)
 		do_action(oneself, DEAD);
 	return (result);
 }
@@ -32,7 +33,8 @@ bool	check_turn(t_philosopher *me, t_philo_fork *low, t_philo_fork *high)
 		return (true);
 	pthread_mutex_lock(&low->mutex);
 	pthread_mutex_lock(&high->mutex);
-	wait_turn = me->left_fork->first == LEFT || me->right_fork->first == RIGHT;
+	wait_turn = me->left_fork->first == LEFT;
+	wait_turn |= me->right_fork->first == RIGHT;
 	if (wait_turn)
 	{
 		pthread_mutex_unlock(&high->mutex);
@@ -61,7 +63,6 @@ void	*live_life(void *philo_data)
 	bool			wait_turn;
 	t_philo_fork	*ord[2];
 
-	
 	my_data = philo_data;
 	wait_turn = true;
 	order_forks(my_data, ord);
@@ -100,7 +101,9 @@ void	announce_action(t_philosopher *me, enum e_philo_state action)
 	else if (action == DEAD)
 		printf("%zu %zu died\n", get_time_in_ms(me->begin), me->name);
 	else if (action == PICKING_UP_FORK)
-		printf("%zu %zu has taken a fork\n%zu %zu has taken a fork\n", get_time_in_ms(me->begin), me->name, get_time_in_ms(me->begin), me->name);
+		printf("%zu %zu has taken a fork\n%zu %zu has taken a fork\n",
+			get_time_in_ms(me->begin), me->name,
+			get_time_in_ms(me->begin), me->name);
 }
 
 void	do_action(t_philosopher *me, enum e_philo_state action)

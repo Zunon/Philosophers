@@ -11,26 +11,10 @@
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
-// break endstate;
-// bool	end_state_achieved(t_philosopher *philo, unsigned long *min_eats, size_t chairs)
-// {
-// 	static unsigned long philos_done = 0;
-
-// 	if (min_eats)
-// 	{
-// 		pthread_mutex_lock(&(philo->meals_eaten.mutex));
-// 		if (philo->meals_eaten.meals >= *min_eats)
-// 			philos_done++;
-// 		pthread_mutex_unlock(&(philo->meals_eaten.mutex));
-// 		if (philos_done == chairs)
-// 			return (true);
-// 	}
-// 	return (false);
-// }
 
 void	end_simulation(t_roundtable *table)
 {
-	size_t i;
+	size_t	i;
 
 	table->sim_on = false;
 	i = 0;
@@ -64,7 +48,6 @@ void	dining_philos(t_roundtable *table)
 		return ;
 	}
 	pthread_mutex_unlock(&table->death.mutex);
-	
 	while (i < table->chairs && table->health.min_eats)
 	{
 		pthread_mutex_lock(&(table->philosophers + i)->done_eating.mutex);
@@ -72,7 +55,7 @@ void	dining_philos(t_roundtable *table)
 		{
 			pthread_mutex_unlock(&(table->philosophers + i)->done_eating.mutex);
 			all_ate = false;
-			break;
+			break ;
 		}
 		pthread_mutex_unlock(&(table->philosophers + i)->done_eating.mutex);
 		i++;
@@ -83,7 +66,8 @@ void	dining_philos(t_roundtable *table)
 
 void	simulate_philosophers(t_roundtable *table)
 {
-	if (init_simulation(table)) printf("INITIALIZATION FAILURE\n");
+	if (init_simulation(table))
+		printf("INITIALIZATION FAILURE\n");
 	while (table->sim_on)
 		dining_philos(table);
 	printf("World Simulated!\n");

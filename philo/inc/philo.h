@@ -41,23 +41,23 @@ enum e_philo_state
 
 typedef struct s_philo_state
 {
-	pthread_mutex_t	mutex;
+	pthread_mutex_t		mutex;
 	enum e_philo_state	state;
 }	t_philo_state;
 
 typedef struct s_bool_lock
 {
-	pthread_mutex_t mutex;
+	pthread_mutex_t	mutex;
 	bool			val;
 }	t_bool_lock;
 
 typedef struct s_meallock
 {
-	pthread_mutex_t mutex;
+	pthread_mutex_t	mutex;
 	unsigned long	meals;
 }	t_meallock;
 
-typedef struct timeval t_timeval;
+typedef struct timeval	t_timeval;
 
 typedef struct s_philo_fork
 {
