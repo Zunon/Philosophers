@@ -99,6 +99,8 @@ void	announce_action(t_philosopher *me, enum e_philo_state action)
 		printf("%zu %zu is sleeping\n", get_time_in_ms(me->begin), me->name);
 	else if (action == DEAD)
 		printf("%zu %zu died\n", get_time_in_ms(me->begin), me->name);
+	else if (action == PICKING_UP_FORK)
+		printf("%zu %zu has taken a fork\n%zu %zu has taken a fork\n", get_time_in_ms(me->begin), me->name, get_time_in_ms(me->begin), me->name);
 }
 
 void	do_action(t_philosopher *me, enum e_philo_state action)
@@ -125,7 +127,10 @@ void	do_action(t_philosopher *me, enum e_philo_state action)
 			else
 				duration = me->life->sleep_time;
 			while (get_time_in_ms(me->begin) - start < duration)
-				;
+			{
+				usleep(500);
+				check_reality(me);
+			}
 		}
 	}
 	else
@@ -136,15 +141,24 @@ void	philo_eat(t_philosopher *me, t_philo_fork *ord[2])
 {
 	ord[0]->taken = true;
 	ord[1]->taken = true;
+	pthread_mutex_unlock(&ord[1]->mutex);
+	pthread_mutex_unlock(&ord[0]->mutex);
+	do_action(me, PICKING_UP_FORK);
 	me->last_eaten = get_time_in_ms(me->begin);
 	do_action(me, EATING);
+	pthread_mutex_lock(&ord[0]->mutex);
+	pthread_mutex_lock(&ord[1]->mutex);
 	ord[0]->taken = false;
 	ord[1]->taken = false;
 	me->left_fork->first = LEFT;
 	me->right_fork->first = RIGHT;
 	pthread_mutex_unlock(&ord[1]->mutex);
 	pthread_mutex_unlock(&ord[0]->mutex);
-	pthread_mutex_lock(&me->meals_eaten.mutex);
-	me->meals_eaten.meals++;
-	pthread_mutex_unlock(&me->meals_eaten.mutex);
+	me->meals_eaten++;
+	if (me->life->min_eats && me->meals_eaten == *me->life->min_eats)
+	{
+		pthread_mutex_lock(&me->done_eating.mutex);
+		me->done_eating.val = true;
+		pthread_mutex_unlock(&me->done_eating.mutex);
+	}
 }

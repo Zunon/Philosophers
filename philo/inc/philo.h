@@ -35,7 +35,8 @@ enum e_philo_state
 	THINKING,
 	EATING,
 	SLEEPING,
-	DEAD
+	DEAD,
+	PICKING_UP_FORK
 };
 
 typedef struct s_philo_state
@@ -70,6 +71,7 @@ typedef struct s_philo_parameters
 	t_milliseconds	starve_time;
 	t_milliseconds	eat_time;
 	t_milliseconds	sleep_time;
+	unsigned long	*min_eats;
 }	t_philo_parameters;
 
 typedef struct s_philosopher
@@ -78,7 +80,8 @@ typedef struct s_philosopher
 	t_timeval			begin;
 	size_t				name;
 	t_milliseconds		last_eaten;
-	t_meallock			meals_eaten;
+	t_bool_lock			done_eating;
+	unsigned long		meals_eaten;
 	t_philo_fork		*left_fork;
 	t_philo_fork		*right_fork;
 	t_philo_parameters	*life;
@@ -93,7 +96,6 @@ typedef struct s_roundtable
 	t_philo_fork		*forks;
 	t_philosopher		*philosophers;
 	t_philo_parameters	health;
-	unsigned long		*min_eats;
 	size_t				chairs;
 	bool				sim_on;
 }	t_roundtable;

@@ -35,14 +35,13 @@ int	init_simulation(t_roundtable *world)
 	i = -1;
 	while (++i < world->chairs)
 	{
-		pthread_mutex_lock(&(world->philosophers[i].reality.mutex));
 		world->philosophers[i].reality.val = true;
 		world->philosophers[i].begin = begin;
-		pthread_mutex_unlock(&(world->philosophers[i].reality.mutex));
 	}
 	i = -1;
 	while (++i < world->chairs)
 	{
+		usleep(100);
 		if (pthread_create(&((world->philosophers + i)->soul), NULL, &live_life,
 					(world->philosophers) + i))
 			return (-1);

@@ -19,21 +19,16 @@ t_philosopher	philo_init(t_roundtable *world, size_t name,
 
 	result.soul = 0;
 	pthread_mutex_init(&result.current_state.mutex, NULL);
-	pthread_mutex_lock(&result.current_state.mutex);
 	result.current_state.state = BLANK;
-	pthread_mutex_unlock(&result.current_state.mutex);
 	result.name = name + 1;
 	result.left_fork = pair[0];
 	result.right_fork = pair[1];
 	pthread_mutex_init(&result.reality.mutex, NULL);
-	pthread_mutex_lock(&result.reality.mutex);
 	result.reality.val = false;
-	pthread_mutex_unlock(&result.reality.mutex);
 	result.life = &(world->health);
-	pthread_mutex_init(&result.meals_eaten.mutex, NULL);
-	pthread_mutex_lock(&result.meals_eaten.mutex);
-	result.meals_eaten.meals = 0;
-	pthread_mutex_unlock(&result.meals_eaten.mutex);
+	pthread_mutex_init(&result.done_eating.mutex, NULL);
+	result.done_eating.val = 0;
+	result.meals_eaten = 0;
 	result.last_eaten = 0;
 	result.death_state = &world->death;
 	return (result);
@@ -93,13 +88,13 @@ int	roundtable_init(t_roundtable *table, char *arguments[], bool eat_limit)
 		return (1);
 	if (!atoul(arguments[3], &time_to_sleep))
 		return (1);
+	table->health
+		= (t_philo_parameters){time_to_die, time_to_eat, time_to_sleep, table->health.min_eats};
 	if (eat_limit && !atoul(arguments[4], &min_eats))
 		return (1);
 	else if (eat_limit)
-		*(table->min_eats) = min_eats;
+		*(table->health.min_eats) = min_eats;
 	table->chairs = number_of_philosophers;
-	table->health
-		= (t_philo_parameters){time_to_die, time_to_eat, time_to_sleep};
 	if (roundtable_alloc(table))
 		return (2);
 	return (0);
@@ -115,12 +110,12 @@ int	roundtable_destroy(t_roundtable *table)
 		pthread_mutex_destroy(&((table->forks)[i].mutex));
 		pthread_mutex_destroy(&((table->philosophers)[i].current_state.mutex));
 		pthread_mutex_destroy(&((table->philosophers)[i].reality.mutex));
-		pthread_mutex_destroy(&((table->philosophers)[i].meals_eaten.mutex));
+		pthread_mutex_destroy(&((table->philosophers)[i].done_eating.mutex));
 	}
 	free(table->philosophers);
 	free(table->forks);
-	if (table->min_eats)
-		free(table->min_eats);
+	if (table->health.min_eats)
+		free(table->health.min_eats);
 	memset(table, 0x00, sizeof(t_roundtable));
 	return (0);
 }

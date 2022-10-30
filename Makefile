@@ -21,7 +21,7 @@ BNSSRCS := $(addprefix $(BSRCDIR), $(BSRCFIL))
 OBJECTS	:= $(SOURCES:.c=.o)
 BNSOBJS	:= $(OBJECTS:.c=.o)
 CC		:= gcc
-CFLAGS	:= -Wall -g -Wextra -Werror #-fsanitize=thread #-lpthread 
+CFLAGS	:= -Wall -g -Wextra -Werror -pthread #-fsanitize=thread
 RM		:= rm -f
 
 $(NAME): mandatory 
