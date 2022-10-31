@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 17:59:06 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/30 14:01:46 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/31 11:31:47 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ t_philosopher	philo_init(t_roundtable *world, size_t name,
 	result.meals_eaten = 0;
 	result.last_eaten = 0;
 	result.death_state = &world->death;
+	result.hue = ((float)result.name - 1)/((float)(world->chairs));
 	return (result);
 }
 

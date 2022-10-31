@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 08:19:15 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/30 14:33:29 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/31 11:48:29 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	dining_philos(t_roundtable *table)
 	pthread_mutex_unlock(&table->death.mutex);
 	while (i < table->chairs && table->health.min_eats)
 	{
+		usleep(250);
 		pthread_mutex_lock(&(table->philosophers + i)->done_eating.mutex);
 		if (!((table->philosophers + i)->done_eating.val))
 		{
@@ -70,7 +71,6 @@ void	simulate_philosophers(t_roundtable *table)
 		printf("INITIALIZATION FAILURE\n");
 	while (table->sim_on)
 		dining_philos(table);
-	printf("World Simulated!\n");
 }
 
 int	main(int argc, char *argv[])

@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/28 17:25:30 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/30 14:22:32 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/31 12:19:23 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ bool	check_reality(t_philosopher *oneself)
 	if (get_time_in_ms(oneself->begin) - oneself->last_eaten
 		> oneself->life->starve_time)
 		do_action(oneself, DEAD);
+	usleep(10);
 	return (result);
 }
 
@@ -92,18 +93,34 @@ void	*live_life(void *philo_data)
 
 void	announce_action(t_philosopher *me, enum e_philo_state action)
 {
+	int	red;
+	int	green;
+	int blue;
+
+	red = 255.0 - (me->hue * 255.0);
+	green = (me->hue * 510.0);
+	blue = (me->hue * 255.0);
+	if (green > 255)
+		green = 510 - green;
+	while (red < 150 || green < 150 || blue < 150)
+	{
+		red++;
+		green++;
+		blue++;
+		if (red > 255) red = 255;
+		if (green > 255) green = 255;
+		if (blue > 255) blue = 255;
+	}
 	if (action == THINKING)
-		printf("%zu %zu is thinking\n", get_time_in_ms(me->begin), me->name);
+		printf("\033[38;2;%d;%d;%dm%zu %zu is thinking\033[0m\n", red, green, blue, get_time_in_ms(me->begin), me->name);
 	else if (action == EATING)
-		printf("%zu %zu is eating\n", get_time_in_ms(me->begin), me->name);
+		printf("\033[38;2;%d;%d;%dm%zu %zu is eating\033[0m\n", red, green, blue, get_time_in_ms(me->begin), me->name);
 	else if (action == SLEEPING)
-		printf("%zu %zu is sleeping\n", get_time_in_ms(me->begin), me->name);
+		printf("\033[38;2;%d;%d;%dm%zu %zu is sleeping\033[0m\n", red, green, blue, get_time_in_ms(me->begin), me->name);
 	else if (action == DEAD)
-		printf("%zu %zu died\n", get_time_in_ms(me->begin), me->name);
+		printf("\033[38;2;%d;%d;%dm%zu %zu died\033[0m\n", red, green, blue, get_time_in_ms(me->begin), me->name);
 	else if (action == PICKING_UP_FORK)
-		printf("%zu %zu has taken a fork\n%zu %zu has taken a fork\n",
-			get_time_in_ms(me->begin), me->name,
-			get_time_in_ms(me->begin), me->name);
+		printf("\033[38;2;%d;%d;%dm%zu %zu has taken a fork\033[0m\n", red, green, blue, get_time_in_ms(me->begin), me->name);
 }
 
 void	do_action(t_philosopher *me, enum e_philo_state action)
@@ -114,14 +131,19 @@ void	do_action(t_philosopher *me, enum e_philo_state action)
 	pthread_mutex_lock(&me->current_state.mutex);
 	if (me->current_state.state != action)
 	{
+		pthread_mutex_unlock(&me->current_state.mutex);
 		pthread_mutex_lock(&me->death_state->mutex);
 		if (!me->death_state->val)
 			announce_action(me, action);
 		if (action == DEAD)
 			me->death_state->val = true;
 		pthread_mutex_unlock(&me->death_state->mutex);
-		me->current_state.state = action;
-		pthread_mutex_unlock(&me->current_state.mutex);
+		if (action != PICKING_UP_FORK)
+		{
+			pthread_mutex_lock(&me->current_state.mutex);
+			me->current_state.state = action;
+			pthread_mutex_unlock(&me->current_state.mutex);
+		}
 		if (action == EATING || action == SLEEPING)
 		{
 			start = get_time_in_ms(me->begin);
@@ -130,10 +152,7 @@ void	do_action(t_philosopher *me, enum e_philo_state action)
 			else
 				duration = me->life->sleep_time;
 			while (get_time_in_ms(me->begin) - start < duration)
-			{
-				usleep(500);
 				check_reality(me);
-			}
 		}
 	}
 	else
@@ -146,6 +165,7 @@ void	philo_eat(t_philosopher *me, t_philo_fork *ord[2])
 	ord[1]->taken = true;
 	pthread_mutex_unlock(&ord[1]->mutex);
 	pthread_mutex_unlock(&ord[0]->mutex);
+	do_action(me, PICKING_UP_FORK);
 	do_action(me, PICKING_UP_FORK);
 	me->last_eaten = get_time_in_ms(me->begin);
 	do_action(me, EATING);

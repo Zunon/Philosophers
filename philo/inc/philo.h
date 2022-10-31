@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 08:19:06 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/30 13:56:03 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/31 11:18:58 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ typedef struct s_philosopher
 	pthread_t			soul;
 	t_timeval			begin;
 	size_t				name;
+	float				hue;
 	t_milliseconds		last_eaten;
 	t_bool_lock			done_eating;
 	unsigned long		meals_eaten;
