@@ -6,22 +6,22 @@
 #    By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/18 08:14:11 by kalmheir          #+#    #+#              #
-#    Updated: 2022/10/31 12:39:40 by kalmheir         ###   ########.fr        #
+#    Updated: 2022/10/31 17:01:01 by kalmheir         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		:= philo
 BNSNAME	:= philo_bonus
-SRCSDIR	:= $(NAME)/src/
+SRCSDIR	:= src/
 SRCFILS	:= main.c parsing.c table.c simulation.c life.c utils.c
 SOURCES	:= $(addprefix $(SRCSDIR), $(SRCFILS))
-BSRCDIR := $(BNSNAME)/src/
+BSRCDIR := src/
 BSRCFIL	:= main.c
 BNSSRCS := $(addprefix $(BSRCDIR), $(BSRCFIL))
 OBJECTS	:= $(SOURCES:.c=.o)
 BNSOBJS	:= $(OBJECTS:.c=.o)
 CC		:= gcc
-CFLAGS	:= -Wall -g -Wextra -Werror -pthread #-fsanitize=thread
+CFLAGS	:= -Wall -g -Wextra -Werror -pthread
 RM		:= rm -f
 
 $(NAME): mandatory 
@@ -29,24 +29,17 @@ $(NAME): mandatory
 .c.o:
 	$(CC) $(CFLAGS) -c $< -o $(<:.c=.o)
 
-all: mandatory bonus
+all: mandatory
 
 mandatory: $(OBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS) -o $(NAME)/$(NAME)
+	$(CC) $(CFLAGS) $(OBJECTS) -o $(NAME)
 	
-bonus: $(BNSOBJS)
-	$(CC) $(CFLAGS) $(BNSOBJS) -o $(BNSNAME)/$(BNSNAME)
-
 clean:
 	$(RM) $(OBJECTS)
 	$(RM) $(BNSOBJS)
 
 fclean: clean
-	$(RM) $(NAME)/$(NAME)
-	$(RM) $(BNSNAME)/$(BNSNAME)
+	$(RM) $(NAME)
 
 re: fclean mandatory
 
-rea: fclean all
-
-reb: fclean bonus
