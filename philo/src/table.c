@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 17:59:06 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/31 13:24:54 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/31 14:25:46 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,10 @@ int	free_philos(t_philosopher **philo_arr)
 	return (2);
 }
 
+/**
+ * @brief	allocate everything that needs to be dynamically allocated for the
+ *			simulation
+ */
 int	roundtable_alloc(t_roundtable *table)
 {
 	size_t			i;
@@ -66,6 +70,15 @@ int	roundtable_alloc(t_roundtable *table)
 	return (0);
 }
 
+/**
+ * @brief	initialize our program variables (the world/table struct)
+ *
+ * @param table		pointer to where our program variables are stored
+ * @param arguments	array of numeric strings to be used to set simulation
+ *					parameters
+ * @param eat_limit	whether or not we have an eating minimum supplied to our
+ *					program
+ */
 int	roundtable_init(t_roundtable *table, char *arguments[], bool eat_limit)
 {
 	unsigned long	min_eats;

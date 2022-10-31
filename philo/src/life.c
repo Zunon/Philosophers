@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/28 17:25:30 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/31 13:07:13 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/31 14:53:03 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,12 @@ void	philo_eat(t_philosopher *me, t_philo_fork *ord[2])
 	do_action(me, PICKING_UP_FORK);
 	do_action(me, PICKING_UP_FORK);
 	me->last_eaten = get_time_in_ms(me->begin);
+	if (me->life->min_eats && me->meals_eaten == *me->life->min_eats)
+	{
+		pthread_mutex_lock(&me->done_eating.mutex);
+		me->done_eating.val = true;
+		pthread_mutex_unlock(&me->done_eating.mutex);
+	}
 	do_action(me, EATING);
 	pthread_mutex_lock(&ord[0]->mutex);
 	pthread_mutex_lock(&ord[1]->mutex);
@@ -132,10 +138,4 @@ void	philo_eat(t_philosopher *me, t_philo_fork *ord[2])
 	pthread_mutex_unlock(&ord[1]->mutex);
 	pthread_mutex_unlock(&ord[0]->mutex);
 	me->meals_eaten++;
-	if (me->life->min_eats && me->meals_eaten == *me->life->min_eats)
-	{
-		pthread_mutex_lock(&me->done_eating.mutex);
-		me->done_eating.val = true;
-		pthread_mutex_unlock(&me->done_eating.mutex);
-	}
 }

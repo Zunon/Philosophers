@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 08:19:15 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/31 13:20:08 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/31 14:07:24 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,13 @@ void	simulate_philosophers(t_roundtable *table)
 		dining_philos(table);
 }
 
+/**
+ * @brief main entry point of the program
+ *
+ * @param argc	amount of arguments that the program receives from the shell
+ * @param argv	array of string arguments that the program received from the
+ *				shell
+ */
 int	main(int argc, char *argv[])
 {
 	t_roundtable	table;
