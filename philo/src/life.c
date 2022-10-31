@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/28 17:25:30 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/31 14:53:03 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/31 16:06:18 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	announce_action(t_philosopher *me, enum e_philo_state action)
 	int	green;
 	int	blue;
 
-	if (!me->death_state->val)
+	if (can_announce(me))
 	{
 		determine_colors(me, &red, &green, &blue);
 		if (action == THINKING)

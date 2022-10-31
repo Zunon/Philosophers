@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 08:19:15 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/31 14:07:24 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/31 16:09:55 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,19 @@ void	simulate_philosophers(t_roundtable *table)
 		dining_philos(table);
 }
 
+bool	can_announce(t_philosopher *me)
+{
+	bool	death_occured;
+	bool	finished_eating;
+
+	death_occured = me->death_state->val;
+	if (me->life->min_eats)
+		finished_eating = me->meals_eaten >= *me->life->min_eats;
+	else
+		finished_eating = false;
+	return (!death_occured && !finished_eating);
+}
+
 /**
  * @brief main entry point of the program
  *
@@ -97,7 +110,8 @@ int	main(int argc, char *argv[])
 		{
 			if (table.health.min_eats)
 				free(table.health.min_eats);
-			return (panic("Couldn't Create Scenario!", 3));
+			return (panic("Couldn't Create Scenario!\n\
+Make sure none of the arguments are zero or empty", 3));
 		}
 		simulate_philosophers(&table);
 		return (roundtable_destroy(&table));

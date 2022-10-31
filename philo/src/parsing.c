@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 18:01:18 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/31 14:23:47 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/31 15:48:09 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ unsigned long	*atoul(const char *string, unsigned long *location)
 		if (ul_overflow(temp, accumulator))
 			return (NULL);
 	}
+	if (accumulator == 0)
+		return (NULL);
 	*location = accumulator;
 	return (location);
 }

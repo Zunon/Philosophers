@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 08:19:06 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/31 13:25:57 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/31 16:08:33 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,5 +125,6 @@ bool			check_turn(t_philosopher *me, t_philo_fork *low,
 void			order_forks(t_philosopher *me, t_philo_fork *ord[2]);
 void			change_state(t_philosopher *me, enum e_philo_state new_state);
 int				roundtable_malloc_stuff(t_roundtable *table);
+bool			can_announce(t_philosopher *me);
 int				free_philos(t_philosopher **philo_arr);
 #endif
