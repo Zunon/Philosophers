@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 17:59:06 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/31 11:31:47 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/31 13:24:54 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_philosopher	philo_init(t_roundtable *world, size_t name,
 	result.meals_eaten = 0;
 	result.last_eaten = 0;
 	result.death_state = &world->death;
-	result.hue = ((float)result.name - 1)/((float)(world->chairs));
+	result.hue = ((float)result.name - 1) / ((float)(world->chairs));
 	return (result);
 }
 
@@ -48,15 +48,8 @@ int	roundtable_alloc(t_roundtable *table)
 	t_philo_fork	*reach[2];
 
 	i = -1;
-	if (pthread_mutex_init(&table->death.mutex, NULL))
-		return (8);
-	table->death.val = false;
-	table->philosophers = malloc(table->chairs * sizeof(t_philosopher));
-	if (!(table->philosophers))
+	if (roundtable_malloc_stuff(table))
 		return (1);
-	table->forks = malloc(table->chairs * sizeof(t_philo_fork));
-	if (!(table->forks))
-		return (free_philos(&table->philosophers));
 	while (++i < table->chairs)
 	{
 		reach[0] = &(table->forks[i]);

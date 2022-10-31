@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/28 17:25:30 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/31 12:19:23 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/31 13:07:13 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,38 +24,6 @@ bool	check_reality(t_philosopher *oneself)
 		do_action(oneself, DEAD);
 	usleep(10);
 	return (result);
-}
-
-bool	check_turn(t_philosopher *me, t_philo_fork *low, t_philo_fork *high)
-{
-	bool	wait_turn;
-
-	if (low == high)
-		return (true);
-	pthread_mutex_lock(&low->mutex);
-	pthread_mutex_lock(&high->mutex);
-	wait_turn = me->left_fork->first == LEFT;
-	wait_turn |= me->right_fork->first == RIGHT;
-	if (wait_turn)
-	{
-		pthread_mutex_unlock(&high->mutex);
-		pthread_mutex_unlock(&low->mutex);
-	}
-	return (wait_turn);
-}
-
-void	order_forks(t_philosopher *me, t_philo_fork *ord[2])
-{
-	if (me->left_fork < me->right_fork)
-	{
-		ord[0] = me->left_fork;
-		ord[1] = me->right_fork;
-	}
-	else
-	{
-		ord[0] = me->right_fork;
-		ord[1] = me->left_fork;
-	}
 }
 
 void	*live_life(void *philo_data)
@@ -77,11 +45,7 @@ void	*live_life(void *philo_data)
 			wait_turn = check_turn(my_data, ord[0], ord[1]);
 		}
 		if (!check_reality(my_data))
-		{
-			pthread_mutex_unlock(&ord[0]->mutex);
-			pthread_mutex_unlock(&ord[1]->mutex);
-			return (NULL);
-		}
+			return (unlock_both_forks(ord[0], ord[1]));
 		philo_eat(my_data, ord);
 		if (!check_reality(my_data))
 			return (NULL);
@@ -95,32 +59,29 @@ void	announce_action(t_philosopher *me, enum e_philo_state action)
 {
 	int	red;
 	int	green;
-	int blue;
+	int	blue;
 
-	red = 255.0 - (me->hue * 255.0);
-	green = (me->hue * 510.0);
-	blue = (me->hue * 255.0);
-	if (green > 255)
-		green = 510 - green;
-	while (red < 150 || green < 150 || blue < 150)
+	if (!me->death_state->val)
 	{
-		red++;
-		green++;
-		blue++;
-		if (red > 255) red = 255;
-		if (green > 255) green = 255;
-		if (blue > 255) blue = 255;
+		determine_colors(me, &red, &green, &blue);
+		if (action == THINKING)
+			printf("\033[38;2;%d;%d;%dm%zu %zu is thinking\033[0m\n", red, green,
+				blue, get_time_in_ms(me->begin), me->name);
+		else if (action == EATING)
+			printf("\033[38;2;%d;%d;%dm%zu %zu is eating\033[0m\n", red, green,
+				blue, get_time_in_ms(me->begin), me->name);
+		else if (action == SLEEPING)
+			printf("\033[38;2;%d;%d;%dm%zu %zu is sleeping\033[0m\n", red, green,
+				blue, get_time_in_ms(me->begin), me->name);
+		else if (action == DEAD)
+			printf("\033[38;2;%d;%d;%dm%zu %zu died\033[0m\n", red, green, blue,
+				get_time_in_ms(me->begin), me->name);
+		else if (action == PICKING_UP_FORK)
+			printf("\033[38;2;%d;%d;%dm%zu %zu has taken a fork\033[0m\n", red,
+				green, blue, get_time_in_ms(me->begin), me->name);
+		if (action == DEAD)
+			me->death_state->val = true;
 	}
-	if (action == THINKING)
-		printf("\033[38;2;%d;%d;%dm%zu %zu is thinking\033[0m\n", red, green, blue, get_time_in_ms(me->begin), me->name);
-	else if (action == EATING)
-		printf("\033[38;2;%d;%d;%dm%zu %zu is eating\033[0m\n", red, green, blue, get_time_in_ms(me->begin), me->name);
-	else if (action == SLEEPING)
-		printf("\033[38;2;%d;%d;%dm%zu %zu is sleeping\033[0m\n", red, green, blue, get_time_in_ms(me->begin), me->name);
-	else if (action == DEAD)
-		printf("\033[38;2;%d;%d;%dm%zu %zu died\033[0m\n", red, green, blue, get_time_in_ms(me->begin), me->name);
-	else if (action == PICKING_UP_FORK)
-		printf("\033[38;2;%d;%d;%dm%zu %zu has taken a fork\033[0m\n", red, green, blue, get_time_in_ms(me->begin), me->name);
 }
 
 void	do_action(t_philosopher *me, enum e_philo_state action)
@@ -133,17 +94,10 @@ void	do_action(t_philosopher *me, enum e_philo_state action)
 	{
 		pthread_mutex_unlock(&me->current_state.mutex);
 		pthread_mutex_lock(&me->death_state->mutex);
-		if (!me->death_state->val)
-			announce_action(me, action);
-		if (action == DEAD)
-			me->death_state->val = true;
+		announce_action(me, action);
 		pthread_mutex_unlock(&me->death_state->mutex);
 		if (action != PICKING_UP_FORK)
-		{
-			pthread_mutex_lock(&me->current_state.mutex);
-			me->current_state.state = action;
-			pthread_mutex_unlock(&me->current_state.mutex);
-		}
+			change_state(me, action);
 		if (action == EATING || action == SLEEPING)
 		{
 			start = get_time_in_ms(me->begin);

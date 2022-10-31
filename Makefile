@@ -6,14 +6,14 @@
 #    By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/18 08:14:11 by kalmheir          #+#    #+#              #
-#    Updated: 2022/10/30 14:02:20 by kalmheir         ###   ########.fr        #
+#    Updated: 2022/10/31 12:39:40 by kalmheir         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		:= philo
 BNSNAME	:= philo_bonus
 SRCSDIR	:= $(NAME)/src/
-SRCFILS	:= main.c parsing.c table.c simulation.c life.c time.c
+SRCFILS	:= main.c parsing.c table.c simulation.c life.c utils.c
 SOURCES	:= $(addprefix $(SRCSDIR), $(SRCFILS))
 BSRCDIR := $(BNSNAME)/src/
 BSRCFIL	:= main.c

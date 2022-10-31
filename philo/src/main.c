@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 08:19:15 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/31 11:48:29 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/31 13:20:08 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,9 @@ void	dining_philos(t_roundtable *table)
 	i = 0;
 	all_ate = true;
 	pthread_mutex_lock(&table->death.mutex);
-	if (table->death.val)
-	{
-		pthread_mutex_unlock(&table->death.mutex);
-		end_simulation(table);
-		return ;
-	}
-	pthread_mutex_unlock(&table->death.mutex);
+	if ((table->death.val && !pthread_mutex_unlock(&table->death.mutex))
+		|| pthread_mutex_unlock(&table->death.mutex))
+		return (end_simulation(table));
 	while (i < table->chairs && table->health.min_eats)
 	{
 		usleep(250);
@@ -58,8 +54,7 @@ void	dining_philos(t_roundtable *table)
 			all_ate = false;
 			break ;
 		}
-		pthread_mutex_unlock(&(table->philosophers + i)->done_eating.mutex);
-		i++;
+		pthread_mutex_unlock(&(table->philosophers + i++)->done_eating.mutex);
 	}
 	if (all_ate && table->health.min_eats)
 		end_simulation(table);

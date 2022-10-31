@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 08:19:06 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/31 11:18:58 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/31 13:25:57 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,15 @@ int				roundtable_destroy(t_roundtable *table);
 void			simulate_philosophers(t_roundtable *table);
 void			philo_think(t_philosopher *oneself);
 void			philo_eat(t_philosopher *me, t_philo_fork *ord[2]);
+void			*unlock_both_forks(t_philo_fork *low, t_philo_fork *high);
 t_milliseconds	get_time_in_ms(t_timeval then);
+void			determine_colors(t_philosopher *me, int *red, int *green,
+					int *blue);
 void			do_action(t_philosopher *me, enum e_philo_state action);
+bool			check_turn(t_philosopher *me, t_philo_fork *low,
+					t_philo_fork *high);
+void			order_forks(t_philosopher *me, t_philo_fork *ord[2]);
+void			change_state(t_philosopher *me, enum e_philo_state new_state);
+int				roundtable_malloc_stuff(t_roundtable *table);
+int				free_philos(t_philosopher **philo_arr);
 #endif
