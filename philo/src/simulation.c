@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 19:18:40 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/31 13:26:14 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/31 16:36:27 by kalmheir         ###   ########.fr       */
 /*											                                  */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	init_simulation(t_roundtable *world)
 	i = -1;
 	while (++i < world->chairs)
 	{
-		usleep(100);
+		usleep(350);
 		if (pthread_create(&((world->philosophers + i)->soul), NULL, &live_life,
 				(world->philosophers) + i))
 			return (-1);

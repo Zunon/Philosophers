@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/28 17:25:30 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/31 16:06:18 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/10/31 16:38:56 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ bool	check_reality(t_philosopher *oneself)
 	if (get_time_in_ms(oneself->begin) - oneself->last_eaten
 		> oneself->life->starve_time)
 		do_action(oneself, DEAD);
-	usleep(10);
+	usleep(100);
 	return (result);
 }
 
