@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 17:59:06 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/31 14:25:46 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/11/01 11:54:51 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	roundtable_init(t_roundtable *table, char *arguments[], bool eat_limit)
 	t_milliseconds	time_to_eat;
 	t_milliseconds	time_to_sleep;
 
-	if (!atoul(arguments[0], &number_of_philosophers) && number_of_philosophers)
+	if (!atoul(arguments[0], &number_of_philosophers))
 		return (panic("Can't make that number of chairs!", 1));
 	if (!atoul(arguments[1], &time_to_die))
 		return (1);

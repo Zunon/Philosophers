@@ -6,7 +6,7 @@
 /*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/28 17:25:30 by kalmheir          #+#    #+#             */
-/*   Updated: 2022/10/31 16:38:56 by kalmheir         ###   ########.fr       */
+/*   Updated: 2022/11/01 11:59:31 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,12 +105,13 @@ void	do_action(t_philosopher *me, enum e_philo_state action)
 				duration = me->life->eat_time;
 			else
 				duration = me->life->sleep_time;
-			while (get_time_in_ms(me->begin) - start < duration)
-				check_reality(me);
+			while (get_time_in_ms(me->begin) - start < duration
+				&& check_reality(me))
+				;
 		}
+		return ;
 	}
-	else
-		pthread_mutex_unlock(&me->current_state.mutex);
+	pthread_mutex_unlock(&me->current_state.mutex);
 }
 
 void	philo_eat(t_philosopher *me, t_philo_fork *ord[2])
